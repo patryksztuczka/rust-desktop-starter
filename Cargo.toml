@@ -1,0 +1,38 @@
+[package]
+name = "rust-desktop-starter"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+publish = false
+
+[[bin]]
+name = "starter"
+path = "src/main.rs"
+
+[features]
+# Compile GPUI's Metal shaders at runtime instead of at build time. Use this
+# when full Xcode (with the Metal toolchain) is not installed. Release bundles
+# should be built without it.
+runtime-shaders = ["gpui/runtime_shaders"]
+
+[dependencies]
+clap = { version = "4.6.7", features = ["derive"] }
+color-eyre = "0.6.5"
+dirs = "7.0.0"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+gpui = { version = "0.2.2", default-features = false, features = ["font-kit"] }
+gpui-symbols = { version = "0.6.1", default-features = false, features = ["component", "cache"] }
+libloading = "0.9.0"
+objc2 = "0.6.4"
+objc2-app-kit = "0.3.2"
+objc2-foundation = "0.3.2"
+objc2-service-management = { version = "0.3.2", features = ["SMAppService"] }
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
