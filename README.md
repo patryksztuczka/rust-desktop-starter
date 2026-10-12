@@ -144,24 +144,3 @@ export APP_TEAM_ID=ABCDE12345 APP_NOTARY_PROFILE=my-notary
 number is not newer than the published one. `publish` uploads the DMG and ZIP,
 checks that the public URLs serve identical bytes, and only then replaces the
 appcast, so installed apps never see a half-published release.
-
-## Porting from Electron
-
-| Electron | Here |
-|---|---|
-| `BrowserWindow` + HTML/CSS | `cx.open_window` + a GPUI `Render` view |
-| `ipcMain` / `ipcRenderer` | Direct method calls on the view; `cx.spawn` + `background_executor()` for slow work |
-| `Menu.setApplicationMenu` | `cx.set_menus` with `actions!` |
-| `globalShortcut` (in-app) | `KeyBinding::new` + `cx.bind_keys` |
-| `app.setLoginItemSettings` | `src/login_item.rs` |
-| `autoUpdater` / electron-updater | `src/sparkle.rs` + `scripts/release-app.sh` |
-| `electron-store` | `src/settings.rs` |
-| `shell.showItemInFolder` | `cx.reveal_path` |
-| `shell.openExternal` | `cx.open_url` |
-| `dialog.showMessageBox` | `window.prompt` |
-| Native Node modules | Rust crates, or `objc2-*` bindings for Apple frameworks |
-
-GPUI has no browser engine, so screens that render HTML, Markdown, or
-embedded web pages need a native rewrite. GPUI's documentation is thin; when
-unsure about an API, read how [HEX](https://github.com/anomalyco/hex) or
-[Zed](https://github.com/zed-industries/zed) use it.
